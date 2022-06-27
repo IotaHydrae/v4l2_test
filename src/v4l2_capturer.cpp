@@ -86,10 +86,10 @@ int v4l2_capturer::init()
         /* set format */
         memset( &m_fmt, 0x0, sizeof( m_fmt ) );
         m_fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        m_fmt.fmt.pix.width = 1920;
-        m_fmt.fmt.pix.height = 1080;
-        m_fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_MJPEG;
-        m_fmt.fmt.pix.field       = V4L2_FIELD_ANY;
+        m_fmt.fmt.pix.width = DEFAULT_CAPTURER_PIX_WIDTH;
+        m_fmt.fmt.pix.height = DEFAULT_CAPTURER_PIX_HEIGHT;
+        m_fmt.fmt.pix.pixelformat = DEFAULT_CAPTURER_PIX_FORMAT;
+        m_fmt.fmt.pix.field       = DEFAULT_CAPTURER_PIX_FIELD;
         
         if( ioctl( m_fd, VIDIOC_S_FMT, &m_fmt ) < 0 ) {
                 perror( "ioctl VIDIOC_S_FMT failed!" );
@@ -337,6 +337,7 @@ int v4l2_capturer::save_fbdata_to_file_by_mmap( const char *path )
 void v4l2_capturer::query_supported_format_new()
 {
         struct v4l2_fmtdesc fmt_desc;
+        struct v4l2_frmsizeenum frmsize;
         
         if( m_fd < 0 ) {
                 printf( "device haven't been openned!\n" );
@@ -350,6 +351,15 @@ void v4l2_capturer::query_supported_format_new()
         
         while( ioctl( m_fd, VIDIOC_ENUM_FMT, &fmt_desc ) != -1 ) {
                 printf( "\t%d. Type: %s\n", fmt_desc.index, fmt_desc.description );
+
+                m_frmsize.index=0;
+                m_frmsize.pixel_format = fmt_desc.pixelformat;
+                printf("\tResolutions:\n");
+		while( ioctl(m_fd, VIDIOC_ENUM_FRAMESIZES, &m_frmsize ) >= 0 ) {
+                        printf("\t\t%d x %d\n", m_frmsize.discrete.width,
+                                m_frmsize.discrete.height );
+                        m_frmsize.index++;
+                }
                 fmt_desc.index++;
         }
 }

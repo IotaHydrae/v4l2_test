@@ -51,7 +51,12 @@
 #include <linux/videodev2.h>
 
 #define DEFAULT_CAMERA_PATH "/dev/video0"
-#define DEFAULT_BUFFER_COUNT 4
+#define DEFAULT_BUFFER_COUNT 8
+#define DEFAULT_CAPTURER_PIX_WIDTH (640)
+#define DEFAULT_CAPTURER_PIX_HEIGHT (480)
+#define DEFAULT_CAPTURER_PIX_FORMAT V4L2_PIX_FMT_MJPEG
+// #define DEFAULT_CAPTURER_PIX_FORMAT V4L2_PIX_FMT_YUYV
+#define DEFAULT_CAPTURER_PIX_FIELD V4L2_FIELD_ANY
 
 #define LOG_DEBUG(msg)printf(msg"\n")
 #define CHECK_FMT_IF_SUPPORTED(pixelformat, v4l2_fmt)if(pixelformat == v4l2_fmt)printf(#v4l2_fmt" supported\n");
