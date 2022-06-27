@@ -54,12 +54,12 @@ int main( int argc, char const *argv[] )
         capturer.query_supported_format_new();
         capturer.start();
         
-        while(1){
-            frame_count=capturer.get_frame();
-            if(frame_count==25*3)break;
-        }
+        // while(1){
+        //     frame_count=capturer.get_frame();
+        //     if(frame_count==25*3)break;
+        // }
         
-        // capturer.get_frame();
+        capturer.get_frame();
         capturer.stop();
         return 0;
 }
